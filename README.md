@@ -35,6 +35,8 @@ The process involves:
     - Key pair → pem_server_key
     - security group → launch-wizard-1
 
+![Project Screenshot](/images/instance.jpg)
+
 ## Step 2: Connect to EC2 via SSH
 
 1. Connect to EC2 via SSH
@@ -42,6 +44,7 @@ The process involves:
 ```bash
 ssh -i "pem-server-key.pem" ec2-user@ec2-54-164-193-230.compute-1.amazonaws.com
 ```
+![Project Screenshot](/images/connect-instance.jpg)
 
 ## Step 3: Create EBS Volume
 
@@ -53,6 +56,10 @@ ssh -i "pem-server-key.pem" ec2-user@ec2-54-164-193-230.compute-1.amazonaws.com
     - **Availability Zone** → same as your EC2 instance (e.g., `us-east-1a`)
 5. Leave other settings as default (volume type: `gp3` or `gp2`)
 6. Click on **Create Volume**
+
+![Project Screenshot](/images/create_volume.jpg)
+![Project Screenshot](/images/volume-done.jpg)
+![Project Screenshot](/images/attacting-volume.jpg)
 
 ## **Step 4: Attach EBS Volume to EC2 Instance**
 
