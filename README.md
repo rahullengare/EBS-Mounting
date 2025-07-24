@@ -1,4 +1,3 @@
-# Attach and Mount an EBS Volume on EC2
 ## **About the Project**
 
 This project demonstrates how to **attach and mount an Amazon EBS (Elastic Block Store) volume** to an **EC2 (Elastic Compute Cloud) instance** using AWS. The goal is to expand the storage capacity of a running EC2 instance by adding a separate volume that can be used to store files, databases, or application data.
@@ -13,12 +12,8 @@ The process involves:
 
 - **Amazon Web Services (AWS)** – Cloud platform to host and manage infrastructure
 - **Amazon EC2** – Service to launch and manage virtual servers in the cloud
-- **Amazon EBS (Elastic Block Store)** – Provides persistent block storage for EC2 instances
-- **Linux (Amazon Linux/Ubuntu)** – Operating system installed on the EC2 instance
-- **SSH (Secure Shell)** – Secure protocol to access the EC2 instance remotely
-- **Key Pair** – Authentication method used to securely log in to EC2
-- **Security Group** – Virtual firewall to manage network access rules
-- **AWS Management Console / AWS CLI** – Web interface and command-line tool for managing AWS resources
+- **SSH:** Secure terminal access to EC2 instance
+- **Amazon Linux**: The operating system used on the EC2 instance.
 
 ## What is EBS?
 
@@ -35,18 +30,7 @@ The process involves:
     - Key pair → pem_server_key
     - security group → launch-wizard-1
 
-![Project Screenshot](/images/instance.jpg)
-
-## Step 2: Connect to EC2 via SSH
-
-1. Connect to EC2 via SSH
-
-```bash
-ssh -i "pem-server-key.pem" ec2-user@ec2-54-164-193-230.compute-1.amazonaws.com
-```
-![Project Screenshot](/images/connect-instance.jpg)
-
-## Step 3: Create EBS Volume
+## Step 2: Create EBS Volume
 
 1. Go to **EC2 Dashboard**
 2. In the left menu, click on **Volumes** under **Elastic Block Store**
@@ -57,11 +41,7 @@ ssh -i "pem-server-key.pem" ec2-user@ec2-54-164-193-230.compute-1.amazonaws.com
 5. Leave other settings as default (volume type: `gp3` or `gp2`)
 6. Click on **Create Volume**
 
-![Project Screenshot](/images/create_volume.jpg)
-![Project Screenshot](/images/volume-done.jpg)
-![Project Screenshot](/images/attacting-volume.jpg)
-
-## **Step 4: Attach EBS Volume to EC2 Instance**
+## **Step 3: Attach EBS Volume to EC2 Instance**
 
 1. After volume is created, select it from the list
 2. Click on **Actions** → **Attach Volume**
@@ -69,42 +49,71 @@ ssh -i "pem-server-key.pem" ec2-user@ec2-54-164-193-230.compute-1.amazonaws.com
 4. Device name → leave default (`/dev/sdf`)
 5. Click **Attach**
 
-## Step 5: Format and Mount the Volume
+## Step 4: Format and Mount the Volume
 
-1. On your EC2 terminal, run to check devices:
+1. Connect instance via SSH
+
+```bash
+ssh -i "pem-server-key.pem" ec2-user@ec2-100-26-31-151.compute-1.amazonaws.com
+```
+
+1. Check the volume is attached to your instance or check partition 
 
 ```bash
 lsblk
 ```
 
-1. Format the EBS volume (only if new):
+1. Make the partition to new Volume 
 
 ```bash
-sudo mkfs -t ext4 /dev/xvdf
+sudo fdisk /dev/xvdf
+			n -> n → new partition 
+			+2G -> for make 2GB partition 
+			w -> for the save all changes and Exit 
+lablk   -> recheck 
 ```
 
-1. Create mount point:
+1. Format Partitions with XFS
 
 ```bash
-sudo mkdir /mnt/ebs
+sudo mkfs.xfs /dev/xvdf1
+sudo mkfs.xfs /dev/xvdf2
 ```
 
-1. Mount the volume:
+1. Create mount points
 
 ```bash
-sudo mount /dev/xvdf /mnt/ebs
+sudo mkdir /mnt
+sudo mkdir /opt
 ```
 
-1. Verify:
+1. Mount the partitions
 
 ```bash
-df -h
+sudo mount /dev/xvdf1 /mnt
+sudo mount /dev/xvdf2 /opt
 ```
 
-## Step 6: Terminate the Instance (When Done)
+1. Verify mount points
 
-1. Go to **EC2 → Instances**
-2. Select the instance you want to delete
-3. Click on **Instance State**
-4. Choose **Terminate Instance**
-5. Confirm termination
+```bash
+lsblk
+```
+
+## Step 5: **Terminating Your instance**
+
+1. Your use are done then got to AWS console
+2. Click on EC2 → instance
+3. Select instance You want to terminated
+4. Click on Instance state
+5. Choose **Terminate (delete) instance**
+6. Now click delete
+
+## Step 6: Delete your Volume
+
+1. Your use are done then got to AWS console
+2. Click on EC2 → volume 
+3. Select instance You want to deleted
+4. Click on Action
+5. Choose **delete Volume** 
+6. Now click delete
