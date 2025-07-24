@@ -1,20 +1,23 @@
 # Attach and Mount an EBS Volume on EC2
 ## **About the Project**
 
-This project demonstrates how to **attach and mount an Amazon EBS (Elastic Block Store) volume** to an **EC2 (Elastic Compute Cloud) instance** using AWS. The goal is to expand the storage capacity of a running EC2 instance by adding a separate volume that can be used to store files, databases, or application data.
+This project demonstrates how to **attach and mount an Amazon EBS (Elastic Block Store) volume** to an **EC2 (Elastic Compute Cloud) instance** using AWS. It starts with launching a virtual server (EC2), creating a new storage volume (EBS), and connecting to the server using SSH. The storage volume is then attached to the server, partitioned using fdisk, formatted with the XFS file system, and mounted to folders like /mnt and /opt. The /etc/fstab file is updated so the volume mounts automatically when the server restarts. This project is useful for learning how to manage extra storage on cloud servers in a simple and practical way.
 
 The process involves:
-
+- launch a instance
 - Creating a new EBS volume
 - Attaching it to an EC2 instance
-- Formatting and mounting it on the Linux system
+- Formatting and mounting this volume
 
 ## **Tools and Technologies:**
 
 - **Amazon Web Services (AWS)** – Cloud platform to host and manage infrastructure
 - **Amazon EC2** – Service to launch and manage virtual servers in the cloud
-- **SSH:** Secure terminal access to EC2 instance
-- **Amazon Linux**: The operating system used on the EC2 instance.
+- **Amazon EBS (Elastic Block Store)** – Used to attach extra storage volumes to EC2
+- **Amazon Linux** – The operating system used on the EC2 instance
+- **SSH (Secure Shell)** – To securely connect to the EC2 instance from local machine
+- **fdisk** – Tool used to create partitions on the EBS volume
+- **mkfs.xfs** – Command to format partitions with the XFS file system
 
 ## What is EBS?
 
